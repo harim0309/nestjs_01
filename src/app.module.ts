@@ -12,12 +12,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { User } from './users/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
+  // 이 클래스는 NestJS 모듈임을 나타냄
   imports: [
+    // 각각의 도메인 모듈들을 여기에 등록함
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal: true, // 모든 모듈을 한 번에 가져와서 import 가능
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -34,8 +36,9 @@ import { User } from './users/user.entity';
       }),
     }),
     UsersModule,
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController], // 루트 수준 라우터 설정
+  providers: [AppService], // 애플리케이션 전역에서 사용할 서비스
 })
 export class AppModule {}
