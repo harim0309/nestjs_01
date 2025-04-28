@@ -17,5 +17,6 @@ import { User } from './user.entity';
   imports: [TypeOrmModule.forFeature([User])], // forFeature는 이 모듈 안에서 UserRepository를 주입 가능하게 함
   providers: [UsersService],
   controllers: [UsersController],
+  exports: [UsersService],
 })
 export class UsersModule {}

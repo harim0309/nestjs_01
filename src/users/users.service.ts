@@ -7,7 +7,7 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-
+import * as bcrypt from 'bcrypt';
 @Injectable() // 의존성 주입 대상임을 표시 & "이 클래스는 다른 데서 꺼내 쓸 수 있게 등록할게요~" 라는 표시
 export class UsersService {
   constructor(
@@ -23,7 +23,12 @@ export class UsersService {
     }
 
     // 새 유저 생성
-    const user = this.usersRepo.create({ username, password });
+    const hashedPassword = await bcrypt.hash(password, 10); // ✅ 비밀번호 암호화
+    const user = this.usersRepo.create({ username, password: hashedPassword });
     return this.usersRepo.save(user);
+  }
+
+  async findByUsername(username: string): Promise<User | null> {
+    return this.usersRepo.findOne({ where: { username } });
   }
 }
